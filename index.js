@@ -65,13 +65,20 @@ app.get("/readexcelfile", (req, res) => {
     let fileName = req.query.filename;
     let data = [];
     try {
-        const file = reader.readFile('publicfiles/' + fileName + ".xlsx",{sheetStubs: true});
+        const file = reader.readFile('publicfiles/' + fileName + ".xlsx",{sheetStubs: true},{
+            type: 'binary',
+            cellDates: true,
+            cellNF: false,
+            cellText: false
+          });
         const sheetNames = file.SheetNames;
 
         //Sayfa sayısı kadar dönecek
         //-1 dedik kaç tane boş sayfa varsa diye bir algoritma yazıp çıkarırız baştan
         for (let i = 0; i < sheetNames.length; i++) {
-            const arr = reader.utils.sheet_to_json(file.Sheets[sheetNames[i]])
+            const arr = reader.utils.sheet_to_json(file.Sheets[sheetNames[i]],{
+                raw: false,
+               })
           //  for(let k = 0 ; k < arr.length ; k++){
             //    data.push(arr[k]);
             //}
